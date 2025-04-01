@@ -1,0 +1,266 @@
+[
+  {
+    "N":1,
+    "Macroárea":"Agro e Alimentos",
+    "Segmento":"Agricultura",
+    "Domínios Afeitos":"Fertilizantes e nutrição vegetal; Controle biológico de pragas; Controle químico de pragas; Melhoramento genético vegetal; Agricultura de precisão e automação agrícola; Gestão e Manejo da produção agrícola;"
+  },
+  {
+    "N":2,
+    "Macroárea":"Agro e Alimentos",
+    "Segmento":"Alimentos e Bebidas",
+    "Domínios Afeitos":"Processamento de alimentos e bebidas; Segurança e conservação alimentar; Embalagens de alimentos; Alternativas proteicas e\/ou alimentos funcionais;"
+  },
+  {
+    "N":3,
+    "Macroárea":"Agro e Alimentos",
+    "Segmento":"Pecuária",
+    "Domínios Afeitos":"Nutrição e alimentação animal; Controle de doenças e zoonoses; Melhoramento genético animal; Gestão e Manejo da produção pecuária;"
+  },
+  {
+    "N":4,
+    "Macroárea":"Construção",
+    "Segmento":"Construção de Edifícios",
+    "Domínios Afeitos":"Edificações sustentáveis; Automação predial e IoT em edifícios; Materiais estruturais avançados; Eficiência energética em edificações; Sistemas modulares e pré-fabricados"
+  },
+  {
+    "N":5,
+    "Macroárea":"Construção",
+    "Segmento":"Obras de Infraestrutura",
+    "Domínios Afeitos":"Infraestruturas inteligentes; Pavimentos e materiais inovadores; Monitoramento estrutural; Saneamento e gestão hídrica; Tecnologias para grandes obras civis"
+  },
+  {
+    "N":6,
+    "Macroárea":"Construção",
+    "Segmento":"Serviços Especializados para Construção",
+    "Domínios Afeitos":"Tecnologias de construção a seco; Impressão 3D para construção; Materiais sustentáveis e recicláveis; Equipamentos e automação no canteiro; Soluções para retrofit e reforma"
+  },
+  {
+    "N":7,
+    "Macroárea":"Defesa e aeroespacial",
+    "Segmento":"Aeronáutica",
+    "Domínios Afeitos":"Projeto e fabricação de aeronaves; Aerodinâmica e estruturas aeronáuticas; Sistemas embarcados e aviônicos"
+  },
+  {
+    "N":8,
+    "Macroárea":"Defesa e aeroespacial",
+    "Segmento":"Propulsão e Lançadores Espaciais",
+    "Domínios Afeitos":"Foguetes; Sistemas de propulsão; Plataformas de lançamento e reentrada"
+  },
+  {
+    "N":9,
+    "Macroárea":"Defesa e aeroespacial",
+    "Segmento":"Tecnologias de Defesa e Armamentos",
+    "Domínios Afeitos":"Materiais balísticos (coletes, placas, blindagens); Armas, projéteis e munições; Sistemas de proteção e defesa terrestre\/naval\/aérea"
+  },
+  {
+    "N":10,
+    "Macroárea":"Energia renovável",
+    "Segmento":"Biomossa (biodiesel) e biogás",
+    "Domínios Afeitos":"Produção de biodiesel; Digestores anaeróbicos; Purificação e refino de biogás; Cogeração de energia com biomassa; Aproveitamento de resíduos orgânicos; Tecnologias para biomassa lignocelulósica"
+  },
+  {
+    "N":11,
+    "Macroárea":"Energia renovável",
+    "Segmento":"Energia eólica",
+    "Domínios Afeitos":"Turbinas onshore e offshore; Sistemas de controle e conversão de energia; Integração com redes elétricas; Armazenamento complementar; Otimização de aerodinâmica e materiais; Previsão e monitoramento de vento"
+  },
+  {
+    "N":12,
+    "Macroárea":"Energia renovável",
+    "Segmento":"Energia hidrelétrica",
+    "Domínios Afeitos":"Micro e minihidrelétricas; Turbinas reversíveis e bombas-turbinas; Sistemas de modernização de usinas existentes; Monitoramento ambiental de reservatórios; Integração com outras fontes renováveis; Otimização hidrossistêmica"
+  },
+  {
+    "N":13,
+    "Macroárea":"Energia renovável",
+    "Segmento":"Energia solar fotovoltaica",
+    "Domínios Afeitos":"Painéis bifaciais e de alta eficiência; Inversores e sistemas de controle; Armazenamento em baterias; Rastreamento solar automático; Sistemas off-grid e híbridos; Integração com edificações e infraestrutura urbana"
+  },
+  {
+    "N":14,
+    "Macroárea":"Energia renovável",
+    "Segmento":"Hidrogênio verde",
+    "Domínios Afeitos":"Eletrólise com energia renovável; Células a combustível; Armazenamento e transporte de hidrogênio; Tecnologias para distribuição e abastecimento; Integração em sistemas energéticos; Produção a partir de biomassa ou efluentes industriais"
+  },
+  {
+    "N":15,
+    "Macroárea":"Engenharia de Produção",
+    "Segmento":"Gestão da Produção e Operações",
+    "Domínios Afeitos":"Planejamento de processos produtivos; Controle de produção em tempo real; Otimização de linhas de montagem e processos industriais; Aplicação de tecnologias digitais para aumento de eficiência; Integração de sistemas de gestão da produção (MES, ERP); Análise de produtividade e desempenho operacional"
+  },
+  {
+    "N":16,
+    "Macroárea":"Engenharia de Produção",
+    "Segmento":"Gestão de Pessoas e Capacitação",
+    "Domínios Afeitos":"Produtividade da força de trabalho; Ergonomia no ambiente industrial; Capacitação digital e treinamento técnico; Gestão colaborativa e cultura organizacional; Ferramentas de RH baseadas em dados; Plataformas para aprendizagem corporativa (e-learning, simulações)"
+  },
+  {
+    "N":17,
+    "Macroárea":"Engenharia de Produção",
+    "Segmento":"Logística e Cadeias de Suprimento",
+    "Domínios Afeitos":"Rastreabilidade de cargas; Gestão de frotas e monitoramento de veículos; Otimização de rotas e distribuição; Logística reversa e sustentável; Integração de cadeias multimodais; Tecnologias para armazéns inteligentes; Blockchain para logística; Plataformas digitais para supply chain; Robótica e automação logística"
+  },
+  {
+    "N":18,
+    "Macroárea":"Engenharia de Produção",
+    "Segmento":"Qualidade, Riscos e Conformidade",
+    "Domínios Afeitos":"Controle estatístico da qualidade; Certificações industriais e normas ISO; Rastreabilidade de produtos e processos; Sistemas de auditoria digital; Conformidade regulatória e boas práticas de fabricação; Monitoramento de riscos operacionais; Indicadores de desempenho e gestão da não conformidade"
+  },
+  {
+    "N":19,
+    "Macroárea":"Engenharia de Produção",
+    "Segmento":"Simulação e Prototipação Imersiva",
+    "Domínios Afeitos":"Gêmeos digitais para produtos e processos; Simulações imersivas para validação de projetos; Realidade virtual aplicada à engenharia e ao design; Plataformas imersivas para capacitação técnica e treinamento; Modelagem tridimensional e interação em realidade mista; Integração entre sensores físicos e ambientes simulados"
+  },
+  {
+    "N":20,
+    "Macroárea":"Engenharia de Produção",
+    "Segmento":"Sustentabilidade na Produção",
+    "Domínios Afeitos":"Economia circular na indústria; Eficiência no uso de energia e insumos; Reaproveitamento de resíduos industriais; Gestão ambiental de processos produtivos; Avaliação do ciclo de vida de produtos; Tecnologias limpas para manufatura; Redução de emissões e pegada de carbono"
+  },
+  {
+    "N":21,
+    "Macroárea":"Experiências Digitais",
+    "Segmento":"Experiência do Usuário e Visualização de Produtos",
+    "Domínios Afeitos":"Aplicativos com realidade aumentada para experimentação de produtos; Realidade estendida (XR) para testes de usabilidade; Experiências imersivas no varejo digital (vitrines inteligentes, provadores virtuais)"
+  },
+  {
+    "N":22,
+    "Macroárea":"Indústria de base e transformação",
+    "Segmento":"Indústria automobilística",
+    "Domínios Afeitos":"Veículos elétricos e híbridos; Sistemas de direção autônoma; Conectividade veicular (V2X); Materiais leves e de alta resistência para automóveis; Eficiência energética em motores de combustão"
+  },
+  {
+    "N":23,
+    "Macroárea":"Indústria de base e transformação",
+    "Segmento":"Indústria de bens duráveis",
+    "Domínios Afeitos":"Automação na produção de eletrodomésticos; Eficiência energética em bens de consumo; Ergonomia e segurança em eletrodomésticos; Sustentabilidade no ciclo de vida do produto"
+  },
+  {
+    "N":24,
+    "Macroárea":"Indústria de base e transformação",
+    "Segmento":"Indústria de cosméticos",
+    "Domínios Afeitos":"Desenvolvimento de novos cosméticos e dermocosméticos; Formulações sustentáveis e uso de ingredientes naturais; Cosméticos capilares; Cuidados com a pele (skin care); Maquiagem e performance; Embalagens cosméticas inteligentes"
+  },
+  {
+    "N":25,
+    "Macroárea":"Indústria de base e transformação",
+    "Segmento":"Indústria de embalagens",
+    "Domínios Afeitos":"Embalagens biodegradáveis e compostáveis; Embalagens com propriedades funcionais (barreira, antimicrobianas etc.); Design para reciclabilidade e redução de materiais; Impressão funcional e rastreabilidade por QR ou RFID; Automação de linhas de envase e selagem; Embalagens plásticas"
+  },
+  {
+    "N":26,
+    "Macroárea":"Indústria de base e transformação",
+    "Segmento":"Indústria de móveis e madeira",
+    "Domínios Afeitos":"Design sustentável de móveis; Otimização do uso de madeira e derivados; Tratamentos ecológicos para proteção de madeira; Automação na fabricação de móveis; Reaproveitamento de resíduos madeireiros"
+  },
+  {
+    "N":27,
+    "Macroárea":"Indústria de base e transformação",
+    "Segmento":"Indústria de papel e celulose",
+    "Domínios Afeitos":"Novas fibras e bioprodutos a partir de celulose; Otimização de processos de branqueamento; Reaproveitamento de resíduos lignocelulósicos; Redução do consumo de água e energia na produção; Papel inteligente (com sensores, barreiras, etc.)"
+  },
+  {
+    "N":28,
+    "Macroárea":"Indústria de base e transformação",
+    "Segmento":"Indústria eletroeletrônica",
+    "Domínios Afeitos":"Desenvolvimento de placas eletrônicas e sensores; Otimização de circuitos integrados e semicondutores; Eletrônicos embarcados para equipamentos industriais; Eficiência energética e miniaturização de dispositivos; Reutilização e reciclagem de componentes eletrônicos"
+  },
+  {
+    "N":29,
+    "Macroárea":"Indústria de base e transformação",
+    "Segmento":"Indústria química",
+    "Domínios Afeitos":"Desenvolvimento de novos polímeros e compósitos; Processos sustentáveis para síntese química; Substituição de solventes tóxicos por alternativas verdes; Catálise avançada e química de materiais; Reciclagem química de resíduos plásticos"
+  },
+  {
+    "N":30,
+    "Macroárea":"Indústria de base e transformação",
+    "Segmento":"Indústria siderúrgica e metalúrgica",
+    "Domínios Afeitos":"Fundição e conformação de metais; Tratamento térmico e de superfícies; Reciclagem de sucata metálica; Novas ligas metálicas com propriedades especiais; Tecnologias de redução de emissões na produção de aço"
+  },
+  {
+    "N":31,
+    "Macroárea":"Indústria de base e transformação",
+    "Segmento":"Indústria têxtil e de vestuário",
+    "Domínios Afeitos":"Têxteis técnicos e funcionais (ex: antichamas, antibacterianos); Automação na confecção de vestuário; Sustentabilidade na cadeia têxtil; Tingimento ecológico e redução de uso de água; Reaproveitamento de resíduos têxteis"
+  },
+  {
+    "N":32,
+    "Macroárea":"Indústria de base e transformação",
+    "Segmento":"Mineração e extração de minerais",
+    "Domínios Afeitos":"Tecnologias para mineração subterrânea e a céu aberto; Processos de beneficiamento mineral; Reaproveitamento de rejeitos e resíduos de mineração; Monitoramento ambiental e redução de impactos; Extração seletiva e uso de sensores geológicos"
+  },
+  {
+    "N":33,
+    "Macroárea":"Petróleo e gás",
+    "Segmento":"Armazenamento e Distribuição de Combustíveis",
+    "Domínios Afeitos":"Logística de distribuição de combustíveis; Segurança e prevenção de acidentes em terminais e dutos; Rastreabilidade e monitoramento de derivados de petróleo; Automação de operações logísticas; Infraestrutura de transporte (rodoviário, ferroviário, dutoviário); Tecnologias para armazenamento eficiente e sustentável"
+  },
+  {
+    "N":34,
+    "Macroárea":"Petróleo e gás",
+    "Segmento":"Exploração e produção de petróleo",
+    "Domínios Afeitos":"Tecnologias para prospecção geofísica e sísmica; Perfuração de poços em águas profundas e ultraprofundas; Extração de petróleo em reservatórios complexos; Gestão e monitoramento de campos maduros; Injeção e recuperação avançada de petróleo (EOR); Integração de dados para otimização da produção"
+  },
+  {
+    "N":35,
+    "Macroárea":"Petróleo e gás",
+    "Segmento":"Gás Natural",
+    "Domínios Afeitos":"Processamento de gás natural e remoção de impurezas; Transporte via gasodutos; Liquefação (GNL) e compressão (GNC) para transporte; Distribuição e redes urbanas de gás; Tecnologias para aproveitamento de gás residual e flare; Armazenamento subterrâneo e segurança operacional"
+  },
+  {
+    "N":36,
+    "Macroárea":"Petróleo e gás",
+    "Segmento":"Refino de petróleo",
+    "Domínios Afeitos":"Processos de refino atmosférico e a vácuo; Craqueamento catalítico e hidrocraqueamento; Produção de derivados básicos (nafta, eteno, propano, diesel, etc.); Otimização energética das refinarias; Tecnologias de descarbonização e redução de emissões; Digitalização e automação de processos de refino"
+  },
+  {
+    "N":37,
+    "Macroárea":"Saúde",
+    "Segmento":"Assistência à Saúde",
+    "Domínios Afeitos":"Telemedicina; Soluções digitais de triagem e atendimento; Aplicativos de suporte ao cuidado e autogestão da saúde; Sistemas de gestão hospitalar, monitoramento de leitos e ativos; Tecnologias para reabilitação física, cognitiva e cuidados contínuos; Integração de inteligência artificial em fluxos assistenciais"
+  },
+  {
+    "N":38,
+    "Macroárea":"Saúde",
+    "Segmento":"Dispositivos Médicos e Biomateriais",
+    "Domínios Afeitos":"Equipamentos de diagnóstico; Dispositivos vestíveis; Robótica e automação em saúde; Impressão 3D de implantes e próteses; Engenharia de tecidos"
+  },
+  {
+    "N":39,
+    "Macroárea":"Saúde",
+    "Segmento":"Gestão e Inteligência em Saúde Pública",
+    "Domínios Afeitos":"Sistemas de informação em saúde e interoperabilidade de dados; Inteligência epidemiológica, vigilância e predição de surtos; Análise espacial e territorial de dados em saúde; Tecnologias para planejamento, monitoramento e avaliação de políticas públicas; Ferramentas digitais para gestão de redes assistenciais e regulação"
+  },
+  {
+    "N":40,
+    "Macroárea":"Saúde",
+    "Segmento":"Higiene Pessoal e Saúde preventiva",
+    "Domínios Afeitos":"Produtos inovadores de higiene e cuidados pessoais (absorventes, antissépticos, etc.); Dispositivos e kits de prevenção e triagem em saúde comunitária; Tecnologias voltadas à profilaxia e controle de infecções; Monitoramento de condições crônicas e promoção do autocuidado"
+  },
+  {
+    "N":41,
+    "Macroárea":"Saúde",
+    "Segmento":"Produtos Farmacêuticos e Insumos Estratégicos",
+    "Domínios Afeitos":"Desenvolvimento de medicamentos; Biotecnologia e terapias celulares; Genômica e terapia gênica; Bioinformática; Produção de vacinas e biofármacos; Insumos estratégicos do SUS (hemoderivados, soros, radiofármacos, etc.)"
+  },
+  {
+    "N":42,
+    "Macroárea":"Saúde",
+    "Segmento":"Reabilitação e Fisioterapia Avançada",
+    "Domínios Afeitos":"Tecnologias assistivas e exoesqueletos; Realidade virtual e aumentada para reabilitação motora e cognitiva; Protocolos personalizados com suporte de IA para fisioterapia; Sistemas de monitoramento remoto de reabilitação; Impressão 3D de órteses personalizadas"
+  },
+  {
+    "N":43,
+    "Macroárea":"Telecomunicações",
+    "Segmento":"Comunicação por Satélite",
+    "Domínios Afeitos":"Satélites geoestacionários e de órbita baixa (LEO); Antenas e terminais de recepção e transmissão; Plataformas para comunicação intersatélite; Tecnologias para controle e rastreamento de satélites"
+  },
+  {
+    "N":44,
+    "Macroárea":"Telecomunicações",
+    "Segmento":"Redes de Comunicação Terrestre",
+    "Domínios Afeitos":"Redes 5G e futuras gerações (6G); Conectividade móvel; Conectividade fixa; Infraestrutura de fibra óptica; Estações de transmissão; Equipamentos de rede (roteadores, switches, modems industriais)"
+  }
+]
