@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% block title %}Categorizar Projeto - Sistema de Categorização{% endblock %}
+
+{% block extra_css %}
+<style>
+    .project-info {
+        background-color: #f8f9fa;
+        border-left: 4px solid #0d6efd;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col">
+        <h2>
+            <i class="fas fa-tags me-2"></i>Categorizar Projeto
+        </h2>
+    </div>
+    <div class="col-auto">
+        <a href="{{ url_for('main.projects') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="project-info">
+    <h4>{{ project.titulo }}</h4>
+    {% if project.codigo_projeto %}
+    <p class="mb-1"><strong>Código:</strong> {{ project.codigo_projeto }}</p>
+    {% endif %}
+    {% if project.objetivo %}
+    <p class="mb-1"><strong>Objetivo:</strong> {{ project.objetivo }}</p>
+    {% endif %}
+    {% if project.descricao_publica %}
+    <p class="mb-0"><strong>Descrição:</strong> {{ project.descricao_publica }}</p>
+    {% endif %}
+</div>
+
+<div class="card shadow position-relative" id="categoryForm">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Categorização</h5>
+        {% if openai_enabled %}
+        <button type="button" id="aiSuggestBtn" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-robot me-1"></i>Sugerir Categorias com IA
+        </button>
+        {% endif %}
+    </div>
+    
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">Consultando IA para sugestões...</p>
+        </div>
+    </div>
+    
+    <div class="card-body">
+        <form method="POST">
+            <input type="hidden" name="used_ai" id="used_ai" value="false">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="tecnologias_habilitadoras" class="form-label">Tecnologias Habilitadoras</label>
+                    <select class="form-select" id="tecnologias_habilitadoras" name="tecnologias_habilitadoras">
+                        <option value="">Selecione...</option>
+                        {% for option in categories_lists.tecnologias_habilitadoras %}
+                            {% if option %}
+                            <option value="{{ option }}" {% if existing and existing.tecnologias_habilitadoras == option %}selected{% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="areas_aplicacao" class="form-label">Áreas de Aplicação</label>
+                    <select class="form-select" id="areas_aplicacao" name="areas_aplicacao">
+                        <option value="">Selecione...</option>
+                        {% for option in categories_lists.areas_aplicacao %}
+                            {% if option %}
+                            <option value="{{ option }}" {% if existing and existing.areas_aplicacao == option %}selected{% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="microarea" class="form-label">Microárea</label>
+                    <select class="form-select" id="microarea" name="microarea">
+                        <option value="">Selecione...</option>
+                        {% for option in categories_lists.microarea %}
+                            {% if option %}
+                            <option value="{{ option }}" {% if existing and existing.microarea == option %}selected{% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="segmento" class="form-label">Segmento</label>
+                    <select class="form-select" id="segmento" name="segmento">
+                        <option value="">Selecione...</option>
+                        {% for option in categories_lists.segmento %}
+                            {% if option %}
+                            <option value="{{ option }}" {% if existing and existing.segmento == option %}selected{% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="dominio" class="form-label">Domínio</label>
+                    <select class="form-select" id="dominio" name="dominio">
+                        <option value="">Selecione...</option>
+                        {% for option in categories_lists.dominio %}
+                            {% if option %}
+                            <option value="{{ option }}" {% if existing and existing.dominio == option %}selected{% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Salvar Categorização
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+                // Função para obter sugestões da IA
+                $('#aiSuggestBtn').click(function() {
+            $('#loadingOverlay').show();
+            // Marcar que o usuário está usando IA
+            $('#used_ai').val('true');
+            
+            $.ajax({
+                url: '{{ url_for("main.suggest_categories") }}',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    project_id: '{{ project.id }}'
+                }),
+                success: function(data) {
+                    // Preencher formulário com sugestões
+                    if (data.error) {
+                        alert('Erro: ' + data.error);
+                    } else {
+                        if (data.tecnologias_habilitadoras) {
+                            $('#tecnologias_habilitadoras').val(data.tecnologias_habilitadoras);
+                        }
+                        if (data.areas_aplicacao) {
+                            $('#areas_aplicacao').val(data.areas_aplicacao);
+                        }
+                        if (data.microarea) {
+                            $('#microarea').val(data.microarea);
+                        }
+                        if (data.segmento) {
+                            $('#segmento').val(data.segmento);
+                        }
+                        if (data.dominio) {
+                            $('#dominio').val(data.dominio);
+                        }
+                    }
+                    $('#loadingOverlay').hide();
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.responseJSON && xhr.responseJSON.error 
+                        ? xhr.responseJSON.error 
+                        : 'Erro ao obter sugestões';
+                    alert(errorMessage);
+                    $('#loadingOverlay').hide();
+                }
+            });
+        });
+        // Função para obter sugestões da IA
+        $('#aiSuggestBtn').click(function() {
+            $('#loadingOverlay').show();
+            
+            $.ajax({
+                url: '{{ url_for("main.suggest_categories") }}',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    project_id: '{{ project.id }}'
+                }),
+                success: function(data) {
+                    // Preencher formulário com sugestões
+                    if (data.error) {
+                        alert('Erro: ' + data.error);
+                    } else {
+                        if (data.tecnologias_habilitadoras) {
+                            $('#tecnologias_habilitadoras').val(data.tecnologias_habilitadoras);
+                        }
+                        if (data.areas_aplicacao) {
+                            $('#areas_aplicacao').val(data.areas_aplicacao);
+                        }
+                        if (data.microarea) {
+                            $('#microarea').val(data.microarea);
+                        }
+                        if (data.segmento) {
+                            $('#segmento').val(data.segmento);
+                        }
+                        if (data.dominio) {
+                            $('#dominio').val(data.dominio);
+                        }
+                    }
+                    $('#loadingOverlay').hide();
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.responseJSON && xhr.responseJSON.error 
+                        ? xhr.responseJSON.error 
+                        : 'Erro ao obter sugestões';
+                    alert(errorMessage);
+                    $('#loadingOverlay').hide();
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
