@@ -38,9 +38,11 @@
                                 {% if project.codigo_projeto %}
                                 <br><small class="text-muted">Código: {{ project.codigo_projeto }}</small>
                                 {% endif %}
+                                <!-- Debug: Mostrar o código do projeto -->
+                                <br><small class="text-muted">Código do Projeto: {{ project.codigo_projeto }}</small>
                             </td>
                             <td class="text-center">
-                                <a href="{{ url_for('main.categorize', project_id=project.id) }}" class="btn btn-primary btn-sm">
+                                <a href="/categorize/{{ project.codigo_projeto }}" class="btn btn-primary btn-sm categorize-btn" data-project-id="{{ project.codigo_projeto }}">
                                     <i class="fas fa-tags me-1"></i>Categorizar
                                 </a>
                             </td>

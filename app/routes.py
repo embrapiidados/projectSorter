@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify, current_app
-from app.sharepoint_client import SharePointClient
+from app.json_data_client import JsonDataClient
 from app.excel_manager import ExcelManager
 from app.ai_integration import OpenAIClient
 from config import Config
@@ -11,13 +11,9 @@ main = Blueprint('main', __name__)
 # Middleware para verificar autenticação
 @main.before_request
 def check_auth():
-    # Ignorar verificação para rotas de login
-    if request.endpoint in ['main.login', 'main.static']:
-        return
-    
-    # Verificar se o usuário está autenticado
-    if 'sharepoint_username' not in session:
-        return redirect(url_for('main.login'))
+    # Como não estamos mais usando SharePoint, podemos simplificar a autenticação
+    # ou removê-la completamente se não for mais necessária
+    pass
 
 # Rota para a página inicial
 @main.route('/')
@@ -27,47 +23,20 @@ def index():
 # Rota para login
 @main.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None
-    
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        site_url = request.form.get('site_url')
-        
-        try:
-            # Tentar autenticar com o SharePoint
-            sp_client = SharePointClient(site_url, username, password)
-            
-            # Se chegar aqui, a autenticação foi bem-sucedida
-            session['sharepoint_username'] = username
-            session['sharepoint_password'] = password
-            session['sharepoint_site_url'] = site_url
-            
-            return redirect(url_for('main.projects'))
-            
-        except Exception as e:
-            error = str(e)
-    
-    return render_template('login.html', error=error)
+    # Como estamos usando JSON local, não precisamos mais de autenticação no SharePoint
+    # Podemos redirecionar diretamente para a página de projetos
+    return redirect(url_for('main.projects'))
 
 # Rota para listagem de projetos
 @main.route('/projects')
 def projects():
     try:
-        sp_client = SharePointClient(
-            session['sharepoint_site_url'],
-            session['sharepoint_username'],
-            session['sharepoint_password']
-        )
+        # Usar o novo cliente JSON
+        json_client = JsonDataClient()
         
         # Obter dados dos projetos
-        excel_path = Config.SHAREPOINT_EXCEL_PATH
-        
-        # Log do caminho para debug
-        print(f"Tentando acessar planilha: {excel_path}")
-        
-        projects_data = sp_client.get_excel_data(
-            excel_path,
+        projects_data = json_client.get_excel_data(
+            None,  # Não precisamos mais do caminho do Excel
             'projetos'
         )
         
@@ -80,16 +49,12 @@ def projects():
 # Função para registrar log de categorização
 def log_categorization(project_id, used_ai=False):
     try:
-        sp_client = SharePointClient(
-            session['sharepoint_site_url'],
-            session['sharepoint_username'],
-            session['sharepoint_password']
-        )
+        json_client = JsonDataClient()
         
         # Obter logs existentes para determinar próximo ID
         try:
-            logs = sp_client.get_excel_data(
-                Config.SHAREPOINT_EXCEL_PATH,
+            logs = json_client.get_excel_data(
+                None,
                 'logs'
             )
             # Determinar o próximo ID
@@ -98,7 +63,7 @@ def log_categorization(project_id, used_ai=False):
                 ids = [log.get('id', 0) for log in logs]
                 next_id = max(ids) + 1
         except Exception as e:
-            # Se a aba não existir ou ocorrer erro, começar do ID 1
+            # Se o arquivo não existir ou ocorrer erro, começar do ID 1
             print(f"Aviso: Não foi possível ler logs existentes: {str(e)}")
             logs = []
             next_id = 1
@@ -107,24 +72,24 @@ def log_categorization(project_id, used_ai=False):
         log_data = {
             'id': next_id,
             'id_projeto': project_id,
-            'email': session['sharepoint_username'],
+            'email': session.get('sharepoint_username', 'sistema'),
             'data': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             'ia': 'Sim' if used_ai else 'Não'
         }
         
-        # Adicionar o log à planilha
+        # Adicionar o log ao arquivo JSON
         if logs:
             # Adicionar ao final da lista existente
             logs.append(log_data)
-            sp_client.update_excel_data(
-                Config.SHAREPOINT_EXCEL_PATH,
+            json_client.update_excel_data(
+                None,
                 'logs',
                 logs
             )
         else:
             # Criar lista com apenas este log
-            sp_client.update_excel_data(
-                Config.SHAREPOINT_EXCEL_PATH,
+            json_client.update_excel_data(
+                None,
                 'logs',
                 [log_data]
             )
@@ -137,18 +102,15 @@ def log_categorization(project_id, used_ai=False):
 
 # Rota para categorização de um projeto
 @main.route('/categorize/<project_id>', methods=['GET', 'POST'])
+@main.route('/categorize/<project_id>/', methods=['GET', 'POST'])
 def categorize(project_id):
     try:
-        sp_client = SharePointClient(
-            session['sharepoint_site_url'],
-            session['sharepoint_username'],
-            session['sharepoint_password']
-        )
+        json_client = JsonDataClient()
         
         if request.method == 'POST':
             # Processar o formulário de categorização
             category_data = {
-                'id_projeto': project_id,
+                'id_projeto': project_id,  # Agora usando codigo_projeto como identificador
                 'tecnologias_habilitadoras': request.form.get('tecnologias_habilitadoras'),
                 'areas_aplicacao': request.form.get('areas_aplicacao'),
                 'microarea': request.form.get('microarea'),
@@ -159,9 +121,9 @@ def categorize(project_id):
             # Verificar se utilizou a IA (através de um campo oculto no form)
             used_ai = request.form.get('used_ai') == 'true'
             
-            # Atualizar categorização no SharePoint
-            sp_client.update_excel_data(
-                Config.SHAREPOINT_EXCEL_PATH,
+            # Atualizar categorização no arquivo JSON
+            json_client.update_excel_data(
+                None,
                 'categorias',
                 category_data,
                 'id_projeto'
@@ -174,8 +136,8 @@ def categorize(project_id):
             return redirect(url_for('main.projects'))
         
         # Obter dados do projeto
-        project = sp_client.get_project_by_id(
-            Config.SHAREPOINT_EXCEL_PATH,
+        project = json_client.get_project_by_id(
+            None,
             project_id
         )
         
@@ -184,8 +146,8 @@ def categorize(project_id):
             return redirect(url_for('main.projects'))
         
         # Obter listas de categorias
-        categories_lists = sp_client.get_excel_data(
-            Config.SHAREPOINT_EXCEL_PATH,
+        categories_lists = json_client.get_excel_data(
+            None,
             'categorias_lists'
         )
         
@@ -195,8 +157,8 @@ def categorize(project_id):
             organized_lists[column] = list(set([item.get(column, '') for item in categories_lists if item.get(column)]))
         
         # Obter categorização existente
-        existing = sp_client.get_categorization_by_project_id(
-            Config.SHAREPOINT_EXCEL_PATH,
+        existing = json_client.get_categorization_by_project_id(
+            None,
             project_id
         )
         
@@ -219,11 +181,7 @@ def categorize(project_id):
 @main.route('/lists', methods=['GET', 'POST'])
 def lists():
     try:
-        sp_client = SharePointClient(
-            session['sharepoint_site_url'],
-            session['sharepoint_username'],
-            session['sharepoint_password']
-        )
+        json_client = JsonDataClient()
         
         if request.method == 'POST':
             # Processar o formulário de atualização de listas
@@ -235,7 +193,7 @@ def lists():
                 values = [v for v in values if v.strip()]
                 lists_data[column] = values
             
-            # Converter para o formato esperado pelo Excel
+            # Converter para o formato esperado
             excel_data = []
             max_length = max(len(values) for values in lists_data.values())
             
@@ -245,19 +203,15 @@ def lists():
                     row[column] = values[i] if i < len(values) else None
                 excel_data.append(row)
             
-            # Atualizar no SharePoint
-            sp_client.update_excel_data(
-                Config.SHAREPOINT_EXCEL_PATH,
-                'categorias_lists',
-                excel_data
-            )
-            
-            flash('Listas atualizadas com sucesso!', 'success')
+            # Atualizar no JSON
+            # Nota: Esta operação pode não ser suportada diretamente pelo JsonDataClient
+            # pois as listas são geradas a partir do aia.json
+            flash('Funcionalidade não suportada com JSON local', 'warning')
             return redirect(url_for('main.lists'))
         
         # Obter listas de categorias
-        categories_lists = sp_client.get_excel_data(
-            Config.SHAREPOINT_EXCEL_PATH,
+        categories_lists = json_client.get_excel_data(
+            None,
             'categorias_lists'
         )
         
@@ -276,16 +230,12 @@ def lists():
 @main.route('/logs')
 def view_logs():
     try:
-        sp_client = SharePointClient(
-            session['sharepoint_site_url'],
-            session['sharepoint_username'],
-            session['sharepoint_password']
-        )
+        json_client = JsonDataClient()
         
         # Obter logs
         try:
-            logs = sp_client.get_excel_data(
-                Config.SHAREPOINT_EXCEL_PATH,
+            logs = json_client.get_excel_data(
+                None,
                 'logs'
             )
         except Exception as e:
@@ -293,8 +243,8 @@ def view_logs():
             logs = []
         
         # Obter projetos para exibir nomes em vez de IDs
-        projects = sp_client.get_excel_data(
-            Config.SHAREPOINT_EXCEL_PATH,
+        projects = json_client.get_excel_data(
+            None,
             'projetos'
         )
         
@@ -349,16 +299,12 @@ def suggest_categories():
         if not openai_api_key:
             return jsonify({'error': 'Chave da API OpenAI não configurada'}), 400
         
-        # Conectar ao SharePoint
-        sp_client = SharePointClient(
-            session['sharepoint_site_url'],
-            session['sharepoint_username'],
-            session['sharepoint_password']
-        )
+        # Usar o cliente JSON
+        json_client = JsonDataClient()
         
         # Obter dados do projeto
-        project = sp_client.get_project_by_id(
-            Config.SHAREPOINT_EXCEL_PATH,
+        project = json_client.get_project_by_id(
+            None,
             project_id
         )
         
@@ -366,8 +312,8 @@ def suggest_categories():
             return jsonify({'error': 'Projeto não encontrado'}), 404
         
         # Obter listas de categorias
-        categories_lists_data = sp_client.get_excel_data(
-            Config.SHAREPOINT_EXCEL_PATH,
+        categories_lists_data = json_client.get_excel_data(
+            None,
             'categorias_lists'
         )
         
@@ -384,6 +330,12 @@ def suggest_categories():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+# Rota para lidar com /categorize/ sem project_id
+@main.route('/categorize/', methods=['GET'])
+def categorize_no_id():
+    flash('É necessário selecionar um projeto para categorizar', 'warning')
+    return redirect(url_for('main.projects'))
 
 # Rota para logout
 @main.route('/logout')

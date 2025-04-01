@@ -161,8 +161,8 @@
 {% block extra_js %}
 <script>
     $(document).ready(function() {
-                // Função para obter sugestões da IA
-                $('#aiSuggestBtn').click(function() {
+        // Função para obter sugestões da IA
+        $('#aiSuggestBtn').click(function() {
             $('#loadingOverlay').show();
             // Marcar que o usuário está usando IA
             $('#used_ai').val('true');
@@ -172,50 +172,7 @@
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    project_id: '{{ project.id }}'
-                }),
-                success: function(data) {
-                    // Preencher formulário com sugestões
-                    if (data.error) {
-                        alert('Erro: ' + data.error);
-                    } else {
-                        if (data.tecnologias_habilitadoras) {
-                            $('#tecnologias_habilitadoras').val(data.tecnologias_habilitadoras);
-                        }
-                        if (data.areas_aplicacao) {
-                            $('#areas_aplicacao').val(data.areas_aplicacao);
-                        }
-                        if (data.microarea) {
-                            $('#microarea').val(data.microarea);
-                        }
-                        if (data.segmento) {
-                            $('#segmento').val(data.segmento);
-                        }
-                        if (data.dominio) {
-                            $('#dominio').val(data.dominio);
-                        }
-                    }
-                    $('#loadingOverlay').hide();
-                },
-                error: function(xhr, status, error) {
-                    var errorMessage = xhr.responseJSON && xhr.responseJSON.error 
-                        ? xhr.responseJSON.error 
-                        : 'Erro ao obter sugestões';
-                    alert(errorMessage);
-                    $('#loadingOverlay').hide();
-                }
-            });
-        });
-        // Função para obter sugestões da IA
-        $('#aiSuggestBtn').click(function() {
-            $('#loadingOverlay').show();
-            
-            $.ajax({
-                url: '{{ url_for("main.suggest_categories") }}',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    project_id: '{{ project.id }}'
+                    project_id: '{{ project.codigo_projeto }}'
                 }),
                 success: function(data) {
                     // Preencher formulário com sugestões
