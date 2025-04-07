@@ -1,0 +1,35 @@
+[
+  {
+    "_aia_n1_macroarea": "Engenharia de Produção",
+    "_aia_n2_segmento": "Gestão da Produção e Operações",
+    "_aia_n3_dominio_afeito": "Planejamento de processos produtivos;Controle de produção em tempo real;Otimização de linhas de montagem e processos industriais",
+    "confianca": "ALTA",
+    "justificativa": "O projeto envolve a integração de informações para implementação operacional de resultados, relacionando-se diretamente com a gestão da produção e operações.",
+    "_aia_n3_dominio_outro": "Eficiência no uso de energia e insumos;Gestão ambiental de processos produtivos",
+    "timestamp": "2025-04-06T19:35:09.284538",
+    "project_id": "PCOP-2503.0061",
+    "is_ai_suggestion": true
+  },
+  {
+    "_aia_n1_macroarea": "Experiências Digitais",
+    "_aia_n2_segmento": "Experiência do Usuário e Visualização de Produtos",
+    "_aia_n3_dominio_afeito": "Realidade aumentada para experimentação de produtos; Experiências imersivas no varejo digital",
+    "confianca": "ALTA",
+    "justificativa": "O projeto EcoPonto envolve o desenvolvimento de um sistema de visão computacional para coleta de resíduos, que pode se beneficiar de tecnologias de realidade aumentada e experiências imersivas para aprimorar a interação com os usuários.",
+    "_aia_n3_dominio_outro": "N/A",
+    "timestamp": "2025-04-07T10:25:19.952244",
+    "project_id": "PITE-2503.0041",
+    "is_ai_suggestion": true
+  },
+  {
+    "_aia_n1_macroarea": "Saúde",
+    "_aia_n2_segmento": "Assistência à Saúde",
+    "_aia_n3_dominio_afeito": "Telemedicina;Equipamentos de diagnóstico;Tecnologias para reabilitação física, cognitiva e cuidados contínuos",
+    "confianca": "ALTA",
+    "justificativa": "O projeto está diretamente relacionado ao desenvolvimento de novas tecnologias para tratamento do câncer de pele e lesões pré-malignas, envolvendo terapia fotodinâmica e irradiação com laser, o que se encaixa no segmento de Assistência à Saúde.",
+    "_aia_n3_dominio_outro": "Engenharia de tecidos;Desenvolvimento de medicamentos",
+    "timestamp": "2025-04-07T10:27:15.351161",
+    "project_id": "PIFS-2503.0086",
+    "is_ai_suggestion": true
+  }
+]

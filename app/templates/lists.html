@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Listas - Sistema de Categorização{% endblock %}
+
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h2><i class="fas fa-tags me-2" style="color: var(--verde-pii);"></i>Gerenciar Listas de Categorias</h2>
+    <a href="{{ url_for('main.projects') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Voltar
+    </a>
+</div>
+
+<form method="POST" id="listsForm">
+    <div class="row">
+        <!-- Tecnologias Habilitadoras -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Tecnologias Habilitadoras</h5>
+                    <button type="button" class="btn btn-sm btn-outline-primary add-item" data-list="tecnologias_habilitadoras">
+                        <i class="fas fa-plus"></i> Adicionar
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="category-list" id="tecnologias_habilitadoras_list">
+                        {% for item in categories_lists.tecnologias_habilitadoras %}
+                            {% if item %}
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="tecnologias_habilitadoras[]" value="{{ item }}">
+                                <button class="btn btn-outline-danger remove-item" type="button">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Áreas de Aplicação -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Áreas de Aplicação</h5>
+                    <button type="button" class="btn btn-sm btn-outline-primary add-item" data-list="areas_aplicacao">
+                        <i class="fas fa-plus"></i> Adicionar
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="category-list" id="areas_aplicacao_list">
+                        {% for item in categories_lists.areas_aplicacao %}
+                            {% if item %}
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="areas_aplicacao[]" value="{{ item }}">
+                                <button class="btn btn-outline-danger remove-item" type="button">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Microárea -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Microárea</h5>
+                    <button type="button" class="btn btn-sm btn-outline-primary add-item" data-list="microarea">
+                        <i class="fas fa-plus"></i> Adicionar
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="category-list" id="microarea_list">
+                        {% for item in categories_lists.microarea %}
+                            {% if item %}
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="microarea[]" value="{{ item }}">
+                                <button class="btn btn-outline-danger remove-item" type="button">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Segmento -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Segmento</h5>
+                    <button type="button" class="btn btn-sm btn-outline-primary add-item" data-list="segmento">
+                        <i class="fas fa-plus"></i> Adicionar
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="category-list" id="segmento_list">
+                        {% for item in categories_lists.segmento %}
+                            {% if item %}
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="segmento[]" value="{{ item }}">
+                                <button class="btn btn-outline-danger remove-item" type="button">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Domínio -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Domínio</h5>
+                    <button type="button" class="btn btn-sm btn-outline-primary add-item" data-list="dominio">
+                        <i class="fas fa-plus"></i> Adicionar
+                    </button>
+                </div>
+                
+                <div class="card-body">
+                    <div class="category-list" id="dominio_list">
+                        {% for item in categories_lists.dominio %}
+                            {% if item %}
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="dominio[]" value="{{ item }}">
+                                <button class="btn btn-outline-danger remove-item" type="button">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow mb-4">
+        <div class="card-body text-center">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-save me-1"></i>Salvar Todas as Listas
+            </button>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Adicionar novo item
+        $('.add-item').click(function() {
+            var listType = $(this).data('list');
+            var newItem = `
+                <div class="input-group mb-2 fade-in">
+                    <input type="text" class="form-control" name="${listType}[]" placeholder="Nova categoria">
+                    <button class="btn btn-outline-danger remove-item" type="button">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            $(`#${listType}_list`).append(newItem);
+            
+            // Focar no novo input
+            $(`#${listType}_list input`).last().focus();
+        });
+        
+        // Remover item (usando delegação de eventos)
+        $(document).on('click', '.remove-item', function() {
+            $(this).closest('.input-group').fadeOut(300, function() {
+                $(this).remove();
+            });
+        });
+    });
+</script>
+{% endblock %}

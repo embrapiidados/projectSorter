@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Configurações - Sistema de Categorização{% endblock %}
+
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h2><i class="fas fa-cog me-2" style="color: var(--verde-pii);"></i>Configurações</h2>
+    <a href="{{ url_for('main.projects') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Voltar
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h5 class="mb-0">Configurações de IA</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-4">
+                        <label for="openai_api_key" class="form-label">Chave da API OpenAI</label>
+                        <div class="input-group">
+                            <span class="input-group-text" style="background-color: var(--verde-fundo-escuro); border-color: #32383e;">
+                                <i class="fas fa-key"></i>
+                            </span>
+                            <input type="password" class="form-control" id="openai_api_key" name="openai_api_key" 
+                                value="{{ openai_api_key }}" placeholder="sk-...">
+                            <button class="btn btn-outline-secondary" type="button" id="toggleApiKey">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="form-text mt-2">
+                            Esta chave será usada para sugerir categorizações automaticamente usando IA.
+                            <a href="https://beta.openai.com/account/api-keys" target="_blank">Obtenha uma chave aqui</a>.
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>Salvar Configurações
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow">
+            <div class="card-header">
+                <h5 class="mb-0">Sobre o Sistema</h5>
+            </div>
+            <div class="card-body">
+                <h5 style="color: var(--verde-pii-claro);">Sistema de Categorização de Projetos</h5>
+                <p>
+                    Este sistema permite a categorização de projetos armazenados em uma planilha do SharePoint.
+                    O sistema usa a API do SharePoint para acessar e atualizar os dados da planilha.
+                </p>
+                <p>
+                    <strong style="color: var(--verde-pii-claro);">Recursos:</strong>
+                </p>
+                <ul>
+                    <li><i class="fas fa-check me-2" style="color: var(--verde-pii);"></i>Autenticação segura com SharePoint</li>
+                    <li><i class="fas fa-check me-2" style="color: var(--verde-pii);"></i>Visualização e categorização de projetos</li>
+                    <li><i class="fas fa-check me-2" style="color: var(--verde-pii);"></i>Gerenciamento de listas de categorias</li>
+                    <li><i class="fas fa-check me-2" style="color: var(--verde-pii);"></i>Sugestão automática de categorias usando IA</li>
+                </ul>
+                <p>
+                    <strong style="color: var(--verde-pii-claro);">Caminho da planilha no SharePoint:</strong><br>
+                    <code class="d-block p-2 mt-2 rounded" style="background-color: var(--background); border: 1px solid var(--verde-fundo-escuro);">
+                        General/Lucas Pinheiro/db_classificacao/db_classificacao_projeto.xlsx
+                    </code>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Alternar visibilidade da chave da API
+        $('#toggleApiKey').click(function() {
+            var apiKeyInput = $('#openai_api_key');
+            var icon = $(this).find('i');
+            
+            if (apiKeyInput.attr('type') === 'password') {
+                apiKeyInput.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                apiKeyInput.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+    });
+</script>
+{% endblock %}

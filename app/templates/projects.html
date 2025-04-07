@@ -1,0 +1,443 @@
+{% extends "base.html" %}
+
+{% block title %}gepesClassifier v1.0{% endblock %}
+
+{% block extra_css %}
+<style>
+    .projects-header {
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 0rem;
+    }
+    
+    .projects-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .project-icon-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .project-icon {
+        width: 52px;
+        height: 52px;
+        object-fit: contain;
+        margin-top: 5px;
+    }
+    
+    .titles-container {
+        display: flex;
+        flex-direction: column;
+        padding-top: 0.1rem;
+    }
+    
+    .projects-title {
+        color: var(--primary-dark);
+        font-weight: 700;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+        letter-spacing: 0.5px;
+    }
+    
+    .projects-title i {
+        color: var(--primary-color);
+    }
+    
+    .projects-subtitle {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        font-weight: 500;
+        margin-bottom: 0;
+    }
+    
+    .version-badge, .project-count-badge {
+        background-color: var(--primary-dark);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        letter-spacing: 0.5px;
+        margin-left: 0.75rem;
+        vertical-align: top;
+        background: linear-gradient(135deg, #029260, #1A6354);
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .count-icon {
+        margin-right: 4px;
+        font-size: 0.7rem;
+        color: white !important;
+    }
+    
+    .search-container {
+        position: relative;
+        width: 300px;
+    }
+    
+    .search-container i {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+    }
+    
+    .search-input {
+        border-radius: 10px;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        border: 1px solid var(--input-border);
+        background-color: var(--input-bg);
+        transition: all 0.3s ease;
+    }
+    
+    .search-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(53, 187, 159, 0.25);
+    }
+    
+    .project-table-card {
+        border-radius: 12px;
+        overflow: hidden;
+        border: solid 1px #ccc;
+        transition: all 0.3s ease;
+    }
+    
+    .project-table-card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    #projectsTable {
+        margin-bottom: 0;
+    }
+    
+    #projectsTable thead th {
+        background-color: var(--primary-dark);
+        color: white;
+        font-weight: 600;
+        padding: 1rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    #projectsTable tbody td {
+        padding: 0.75rem 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid var(--card-border);
+    }
+    
+    .project-title {
+        font-weight: 300;
+        color: var(--text-muted);
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+        display: block;
+        border-bottom: none;
+    }
+    
+    .project-code {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+    
+    .clickable-row {
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    
+    .clickable-row:hover {
+        background-color: var(--primary-bg-light);
+    }
+    
+    .clickable-row:hover .project-title {
+        color: var(--primary-color);
+    }
+    
+    .empty-state {
+        padding: 3rem 1rem;
+        text-align: center;
+        color: var(--text-muted);
+    }
+    
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    /* Alternância de cores nas linhas */
+    #projectsTable tbody tr:nth-child(even) {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+    
+    /* Estilos para o filtro */
+    .filter-container {
+        position: relative;
+        width: 220px;
+        margin-right: 1rem;
+    }
+    
+    .filter-container i {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+    }
+    
+    .filter-select {
+        border-radius: 10px;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        border: 1px solid var(--input-border);
+        background-color: var(--input-bg);
+        transition: all 0.3s ease;
+        width: 100%;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 16px 12px;
+    }
+    
+    .filter-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(53, 187, 159, 0.25);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="projects-header">
+    <div class="projects-info">
+        <div class="project-icon-container">
+            <img src="{{ url_for('static', filename='img/ai.png') }}" alt="Ícone de Projetos" class="project-icon">
+        </div>
+        <div class="titles-container">
+            <h2 class="projects-title">
+                gepesClassifier
+                <span class="version-badge">v1.0</span>
+                <span class="project-count-badge">
+                    <i class="fas fa-folder count-icon"></i>
+                    {{ "{:,}".format(projects|length).replace(',', '.') }}
+                </span>
+            </h2>
+            <p class="projects-subtitle">
+                Classificador de projetos Embrapii
+            </p>
+        </div>
+    </div>
+    <div class="header-right">
+        <div class="filter-container">
+            <i class="fas fa-filter"></i>
+            <select id="categoryFilter" class="form-control filter-select">
+                <option value="all">Todos os projetos</option>
+                <option value="uncategorized">Não Classificado</option>
+                <option value="categorized">Classificado</option>
+            </select>
+        </div>
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" class="form-control search-input" placeholder="Buscar projeto...">
+        </div>
+    </div>
+</div>
+
+<div class="card project-table-card">
+    <div class="table-responsive">
+        <table class="table" id="projectsTable">
+            <thead>
+                <tr>
+                    <th>Título do Projeto</th>
+                    <th width="20%">Código</th>
+                    <th width="15%">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if projects %}
+                    {% for project in projects %}
+                    <tr class="clickable-row" data-href="/categorize/{{ project.codigo_projeto }}">
+                        <td>
+                            <span class="project-title">{{ project.titulo }}</span>
+                        </td>
+                        <td>
+                            {% if project.codigo_projeto %}
+                            <span class="project-code">{{ project.codigo_projeto }}</span>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if project.categorizado %}
+                            <span class="badge bg-success rounded-pill">Classificado</span>
+                            {% else %}
+                            <span class="badge bg-warning rounded-pill">Não Classificado</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">
+                            <div class="empty-state">
+                                <i class="fas fa-folder-open"></i>
+                                <p>Nenhum projeto encontrado</p>
+                                <button class="btn btn-gradient rounded-pill mt-2">
+                                    <i class="fas fa-plus me-1"></i> Novo Projeto
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Limpar o localStorage relacionado ao overlay de carregamento ao carregar a página de projetos
+        localStorage.removeItem('aiLoadingActive');
+        localStorage.removeItem('aiLoadingMessage');
+        localStorage.removeItem('aiLoadingSubmessage');
+        
+        // Esconder o overlay de carregamento se estiver visível
+        if (typeof aiLoading !== 'undefined') {
+            aiLoading.hide();
+        }
+        
+        // Adicionar atributo data-categorizado às linhas
+        $(".clickable-row").each(function() {
+            var isCategorized = $(this).find(".badge").text() === "Classificado";
+            $(this).attr("data-categorizado", isCategorized);
+        });
+        
+        // Função para filtrar projetos por texto
+        $("#searchInput").on("keyup", function() {
+            applyFilters();
+        });
+        
+        // Função para filtrar por categorização
+        $("#categoryFilter").on("change", function() {
+            // Aplicar filtros
+            applyFilters();
+        });
+        
+        // Função para aplicar todos os filtros ativos
+        function applyFilters() {
+            // Obter valor do filtro de texto
+            var textValue = $("#searchInput").val().toLowerCase();
+            
+            // Obter filtro de categorização selecionado
+            var categorizationFilter = $("#categoryFilter").val();
+            
+            // Aplicar filtros combinados
+            $("#projectsTable tbody tr").not("#noResults").each(function() {
+                var row = $(this);
+                var textMatch = row.text().toLowerCase().indexOf(textValue) > -1;
+                var categorizationMatch = true;
+                
+                // Verificar filtro de categorização
+                if (categorizationFilter === "categorized") {
+                    categorizationMatch = row.attr("data-categorizado") === "true";
+                } else if (categorizationFilter === "uncategorized") {
+                    categorizationMatch = row.attr("data-categorizado") === "false";
+                }
+                
+                // Mostrar ou esconder linha com base nos filtros combinados
+                row.toggle(textMatch && categorizationMatch);
+            });
+            
+            // Atualizar contador de projetos visíveis
+            updateProjectCount();
+            
+            // Verificar se há resultados
+            checkNoResults(textValue);
+        }
+        
+        // Função para atualizar o contador de projetos
+        function updateProjectCount() {
+            var visibleRows = $("#projectsTable tbody tr:visible").not("#noResults").length;
+            $(".project-count-badge").html('<i class="fas fa-folder count-icon"></i> ' + visibleRows.toLocaleString('pt-BR').replace(',', '.'));
+        }
+        
+        // Função para verificar se não há resultados e mostrar mensagem
+        function checkNoResults(searchValue) {
+            var visibleRows = $("#projectsTable tbody tr:visible").not("#noResults").length;
+            if (visibleRows === 0) {
+                // Adicionar mensagem de nenhum resultado
+                if ($("#noResults").length === 0) {
+                    var message = searchValue ? 
+                        'Nenhum resultado encontrado para "' + searchValue + '"' : 
+                        'Nenhum projeto encontrado com os filtros selecionados';
+                    
+                    $("#projectsTable tbody").append(
+                        '<tr id="noResults"><td colspan="3">' +
+                        '<div class="empty-state">' +
+                        '<i class="fas fa-search"></i>' +
+                        '<p>' + message + '</p>' +
+                        '</div></td></tr>'
+                    );
+                } else {
+                    // Atualizar mensagem existente
+                    var message = searchValue ? 
+                        'Nenhum resultado encontrado para "' + searchValue + '"' : 
+                        'Nenhum projeto encontrado com os filtros selecionados';
+                    
+                    $("#noResults td div p").text(message);
+                }
+            } else {
+                // Remover mensagem se houver resultados
+                $("#noResults").remove();
+            }
+        }
+        
+        // Função para tornar as linhas clicáveis
+        $(".clickable-row").click(function() {
+            // Verificar se o projeto já está classificado
+            const isCategorized = $(this).attr("data-categorizado") === "true";
+            
+            // Mostrar o overlay de carregamento antes de redirecionar
+            if (typeof aiLoading !== 'undefined') {
+                if (isCategorized) {
+                    // Mensagem para projetos já classificados
+                    aiLoading.show(
+                        "Carregando projeto...", 
+                        "Abrindo as informações salvas do projeto"
+                    );
+                } else {
+                    // Mensagem para projetos não classificados
+                    aiLoading.show(
+                        "Carregando projeto...", 
+                        "Aguarde enquanto a IA analisa e prepara as sugestões de classificação"
+                    );
+                }
+            }
+            
+            // Redirecionar após um pequeno delay para garantir que o overlay seja exibido
+            setTimeout(() => {
+                window.location = $(this).data("href");
+            }, 100);
+        });
+    });
+</script>
+{% endblock %}

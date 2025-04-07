@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Classificador{% endblock %}</title>
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='img/ai.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/ai.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/ai.png') }}">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Estilos para o overlay de carregamento */
+        .ai-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .ai-loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .ai-loading-content {
+            text-align: center;
+            max-width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .ai-loading-spinner {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .ai-loading-spinner:before,
+        .ai-loading-spinner:after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: center center;
+        }
+        
+        .ai-loading-spinner:before {
+            box-shadow: inset 0 0 0 3px rgba(0, 146, 96, 0.1);
+        }
+        
+        .ai-loading-spinner:after {
+            box-shadow: inset 0 0 0 3px #009260;
+            animation: rotate 1.5s linear infinite;
+            clip-path: polygon(0% 0%, 50% 0%, 50% 100%, 0% 100%);
+        }
+        
+        .ai-loading-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            color: #009260;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .ai-loading-message {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .ai-loading-submessage {
+            font-size: 0.9rem;
+            color: #666;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .ai-loading-progress {
+            width: 300px;
+            height: 4px;
+            background-color: rgba(0, 146, 96, 0.1);
+            border-radius: 4px;
+            margin: 15px auto 0;
+            overflow: hidden;
+        }
+        
+        .ai-loading-progress-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #009260, #1A6354);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.9); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    
+    <div class="container mt-4">
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Main content -->
+        {% block content %}{% endblock %}
+    </div>
+    
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+    <!-- Overlay de carregamento da IA -->
+    <div id="aiLoadingOverlay" class="ai-loading-overlay">
+        <div class="ai-loading-content">
+            <div class="ai-loading-spinner">
+                <i class="fas fa-robot ai-loading-icon"></i>
+            </div>
+            <div class="ai-loading-message" id="aiLoadingMessage">Carregando projeto...</div>
+            <div class="ai-loading-submessage" id="aiLoadingSubmessage">Aguarde enquanto preparamos tudo para você</div>
+            <div class="ai-loading-progress">
+                <div class="ai-loading-progress-bar" id="aiLoadingProgressBar"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Script para controlar o overlay de carregamento -->
+    <script>
+        // Funções para controlar o overlay de carregamento
+        const aiLoading = {
+            overlay: null,
+            message: null,
+            submessage: null,
+            progressBar: null,
+            progressValue: 0,
+            progressInterval: null,
+            
+            init: function() {
+                this.overlay = document.getElementById('aiLoadingOverlay');
+                this.message = document.getElementById('aiLoadingMessage');
+                this.submessage = document.getElementById('aiLoadingSubmessage');
+                this.progressBar = document.getElementById('aiLoadingProgressBar');
+            },
+            
+            show: function(message, submessage) {
+                if (!this.overlay) this.init();
+                
+                if (message) this.message.textContent = message;
+                if (submessage) this.submessage.textContent = submessage;
+                
+                this.overlay.classList.add('active');
+                this.startProgress();
+                
+                // Salvar estado no localStorage para persistir entre páginas
+                localStorage.setItem('aiLoadingActive', 'true');
+                if (message) localStorage.setItem('aiLoadingMessage', message);
+                if (submessage) localStorage.setItem('aiLoadingSubmessage', submessage);
+                
+                // Adicionar um timeout de segurança para esconder o overlay após 30 segundos
+                // Isso garante que o overlay não ficará preso na tela se algo der errado
+                this.safetyTimeout = setTimeout(() => {
+                    console.log('Timeout de segurança acionado no método show para esconder o overlay de carregamento');
+                    this.completeProgress();
+                }, 30000);
+            },
+            
+            hide: function() {
+                if (!this.overlay) this.init();
+                
+                this.overlay.classList.remove('active');
+                this.stopProgress();
+                
+                // Limpar o timeout de segurança se existir
+                if (this.safetyTimeout) {
+                    clearTimeout(this.safetyTimeout);
+                    this.safetyTimeout = null;
+                }
+                
+                // Limpar estado no localStorage
+                localStorage.removeItem('aiLoadingActive');
+                localStorage.removeItem('aiLoadingMessage');
+                localStorage.removeItem('aiLoadingSubmessage');
+            },
+            
+            updateMessage: function(message, submessage) {
+                if (!this.overlay) this.init();
+                
+                if (message) {
+                    this.message.textContent = message;
+                    localStorage.setItem('aiLoadingMessage', message);
+                }
+                
+                if (submessage) {
+                    this.submessage.textContent = submessage;
+                    localStorage.setItem('aiLoadingSubmessage', submessage);
+                }
+            },
+            
+            startProgress: function() {
+                this.stopProgress(); // Limpar qualquer intervalo existente
+                this.progressValue = 0;
+                this.updateProgressBar();
+                
+                this.progressInterval = setInterval(() => {
+                    // Aumentar o progresso gradualmente, mas nunca chegar a 100%
+                    if (this.progressValue < 90) {
+                        this.progressValue += (90 - this.progressValue) * 0.05;
+                        this.updateProgressBar();
+                    }
+                }, 200);
+            },
+            
+            stopProgress: function() {
+                if (this.progressInterval) {
+                    clearInterval(this.progressInterval);
+                    this.progressInterval = null;
+                }
+            },
+            
+            completeProgress: function() {
+                this.stopProgress();
+                this.progressValue = 100;
+                this.updateProgressBar();
+                
+                // Limpar o timeout de segurança se existir
+                if (this.safetyTimeout) {
+                    clearTimeout(this.safetyTimeout);
+                    this.safetyTimeout = null;
+                }
+                
+                // Esconder o overlay após um breve delay
+                setTimeout(() => {
+                    this.hide();
+                }, 500);
+            },
+            
+            updateProgressBar: function() {
+                if (this.progressBar) {
+                    this.progressBar.style.width = this.progressValue + '%';
+                }
+            },
+            
+            // Verificar se o overlay deve ser mostrado (ao carregar a página)
+            checkState: function() {
+                if (localStorage.getItem('aiLoadingActive') === 'true') {
+                    const message = localStorage.getItem('aiLoadingMessage');
+                    const submessage = localStorage.getItem('aiLoadingSubmessage');
+                    this.show(message, submessage);
+                    
+                    // Adicionar um timeout de segurança para esconder o overlay após 30 segundos
+                    // Isso evita que o overlay fique preso na tela se algo der errado
+                    setTimeout(() => {
+                        if (localStorage.getItem('aiLoadingActive') === 'true') {
+                            console.log('Timeout de segurança acionado para esconder o overlay de carregamento');
+                            this.completeProgress();
+                        }
+                    }, 30000);
+                }
+            }
+        };
+        
+        // Verificar estado ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            aiLoading.checkState();
+        });
+    </script>
+</body>
+</html>

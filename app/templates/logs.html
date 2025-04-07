@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Logs de Categorização - Sistema de Categorização{% endblock %}
+
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h2><i class="fas fa-history me-2" style="color: var(--verde-pii);"></i>Logs de Categorização</h2>
+    <a href="{{ url_for('main.projects') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Voltar
+    </a>
+</div>
+
+<div class="card shadow">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Histórico de Categorizações</h5>
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" class="form-control search-input" placeholder="Buscar...">
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="logsTable">
+                <thead class="table-header">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Projeto</th>
+                        <th scope="col">Usuário</th>
+                        <th scope="col">Data/Hora</th>
+                        <th scope="col" class="text-center">Utilizou IA</th>
+                        <th scope="col" class="text-center">Modificado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if logs %}
+                        {% for log in logs %}
+                        <tr>
+                            <td>{{ log.id }}</td>
+                            <td>
+                                <a href="{{ url_for('main.categorize', project_id=log.id_projeto) }}">
+                                    {{ log.projeto_titulo }}
+                                </a>
+                            </td>
+                            <td>{{ log.email }}</td>
+                            <td>{{ log.data }}</td>
+                            <td class="text-center">
+                                {% if log.ia == 'Sim' %}
+                                <span class="badge bg-primary">
+                                    <i class="fas fa-robot me-1"></i>Sim
+                                </span>
+                                {% else %}
+                                <span class="badge bg-secondary">
+                                    <i class="fas fa-user me-1"></i>Não
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% if log.user_modified %}
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-edit me-1"></i>Sim
+                                </span>
+                                {% else %}
+                                <span class="badge bg-light text-dark border">
+                                    <i class="fas fa-check me-1"></i>Não
+                                </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <i class="fas fa-history"></i>
+                                    <p>Nenhum log de categorização encontrado</p>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Função para filtrar logs
+        $("#searchInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#logsTable tbody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+{% endblock %}

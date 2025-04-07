@@ -1,0 +1,744 @@
+{% extends "base.html" %}
+
+{% block title %}gepesClassifier v1.0{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Header com breadcrumb e botão de voltar -->
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center">
+            <h2 class="page-title">
+                <img src="{{ url_for('static', filename='img/dashboard.png') }}" alt="Ícone de Projetos" class="project-icon">Painel de Classificação
+            </h2>
+        </div>
+        <a href="{{ url_for('main.projects') }}" class="btn btn-outline-primary btn-sm rounded-pill">
+            <i class="fas fa-arrow-left me-1"></i>Voltar aos Projetos
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <!-- Card de informações do projeto -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm project-info-card h-100 border-0">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-info-circle me-2 text-primary"></i>Informações do Projeto
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h4 class="project-title mb-3">{{ project.titulo }}</h4>
+                    
+                    <!-- Seção colapsável para informações específicas do projeto -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center" 
+                             id="projectDetailsHeader" data-bs-toggle="collapse" data-bs-target="#projectDetailsContent" 
+                             aria-expanded="false" aria-controls="projectDetailsContent" role="button">
+                            <h6 class="mb-0 fw-bold">
+                                <i class="fas fa-list-alt me-2 text-primary"></i>Dados do Projeto
+                            </h6>
+                            <button class="btn btn-link p-0 border-0 project-collapse-icon">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        
+                        <div id="projectDetailsContent" class="collapse">
+                            <div class="py-2">
+                                {% if project.codigo_projeto %}
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-light text-dark border me-2">ID</span>
+                                    <span>{{ project.codigo_projeto }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if project.unidade_embrapii %}
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-light text-dark border me-2">Unidade EMBRAPII</span>
+                                    <span>{{ project.unidade_embrapii }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if project.data_contrato %}
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-light text-dark border me-2">Data do Contrato</span>
+                                    <span>{{ project.data_contrato }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if project.tipo_projeto %}
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-light text-dark border me-2">Tipo de Projeto</span>
+                                    <span>{{ project.tipo_projeto }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if project._valor_total %}
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-light text-dark border me-2">Valor Total</span>
+                                    <span id="valor_total_formatado">R$ {{ project._valor_total }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if project._perc_valor_embrapii %}
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-light text-dark border me-2">EMBRAPII</span>
+                                    <span class="percentual-formatado" data-valor="{{ project._perc_valor_embrapii }}">{{ project._perc_valor_embrapii }}%</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if project._perc_valor_empresa_sebrae %}
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-light text-dark border me-2">Empresa/SEBRAE</span>
+                                    <span class="percentual-formatado" data-valor="{{ project._perc_valor_empresa_sebrae }}">{{ project._perc_valor_empresa_sebrae }}%</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if project._perc_valor_unidade_embrapii %}
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-light text-dark border me-2">Unidade EMBRAPII</span>
+                                    <span class="percentual-formatado" data-valor="{{ project._perc_valor_unidade_embrapii }}">{{ project._perc_valor_unidade_embrapii }}%</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if project.objetivo %}
+                    <div class="mb-3">
+                        <h6 class="mb-2 text-primary fw-bold">Objetivo</h6>
+                        <p class="text-muted small">{{ project.objetivo }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if project.descricao_publica %}
+                    <div class="mb-3">
+                        <h6 class="mb-2 text-primary fw-bold">Descrição</h6>
+                        <p class="text-muted small">{{ project.descricao_publica }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if project.tecnologia_habilitadora %}
+                    <div class="mb-3">
+                        <h6 class="mb-2 text-primary fw-bold">Tecnologia Habilitadora <span class="text-muted">(Versão antiga)</span></h6>
+                        <p class="text-muted small">{{ project.tecnologia_habilitadora }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if project.area_aplicacao %}
+                    <div class="mb-0">
+                        <h6 class="mb-2 text-primary fw-bold">Área de Aplicação <span class="text-muted">(Versão antiga)</span></h6>
+                        <p class="text-muted small mb-0">{{ project.area_aplicacao }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Coluna de categorização - Card colapsável -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm categorization-card border-0" id="categoryForm">
+                <!-- Header colapsável -->
+                <div class="card-header bg-white d-flex justify-content-between align-items-center" 
+                     id="categorizationHeader" data-bs-toggle="collapse" data-bs-target="#categorizationContent" 
+                     aria-expanded="true" aria-controls="categorizationContent" role="button">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-layer-group me-2 text-primary"></i>Classificação por Área de Interesse de Aplicação
+                    </h5>
+                    <button class="btn btn-link p-0 border-0 collapse-icon">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                </div>
+                
+                <!-- Conteúdo colapsável -->
+                <div id="categorizationContent" class="collapse show">
+                    
+                    <!-- Seção de sugestões da IA -->
+                    {% if ai_suggestion %}
+                    <div id="aiSuggestionSection" class="card-body border-bottom" style="background-color: #fff !important;">
+                        <div class="d-flex justify-content-start align-items-center w-100">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-robot me-2 tech-red-gradient"></i>
+                                <h5 class="mb-0 fw-bold tech-red-gradient">Classificação IA</h5>
+                                {% if ai_suggestion.is_reused_suggestion and ai_suggestion.timestamp %}
+                                <span class="badge bg-light text-secondary ms-2" title="Classificação gerada em {{ ai_suggestion.timestamp|replace('T', ' ')|truncate(16, True, '') }}">
+                                    <i class="fas fa-history me-1"></i>Existente
+                                </span>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex align-items-center ms-auto">
+                                <span class="badge rounded-pill me-2 fs-6" id="aiConfidenceBadge" style="font-weight: 500; border: 2px solid #17a2b8;">
+                                    <img src="{{ url_for('static', filename='img/confianca.png') }}" alt="Confiança" height="20" class="me-1">
+                                    <span>-</span>
+                                </span>
+                                <button type="button" class="btn btn-sm btn-gradient rounded-pill" id="showJustificationBtn">
+                                    <i class="fas fa-info-circle me-1"></i><span>Ver Classificação</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-2 p-3 border rounded" id="justificationBox" style="display: none; background-color: #fff !important;">
+
+                            
+                            <!-- Seção de categorias sugeridas pela IA -->
+                            <div class="mb-3">
+                                <h6 class="mb-2 tech-red-gradient fw-bold">Classificação sugerida</h6>
+                                
+                                <!-- Macroarea e Segmento -->
+                                <div class="mb-2">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <span class="badge bg-light text-dark border me-2">Macroarea</span>
+                                        <span id="aiMacroarea" class="text-muted">-</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-light text-dark border me-2">Segmento</span>
+                                        <span id="aiSegmento" class="text-muted">-</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Domínios Afeitos (como balões) -->
+                                <div class="mb-2 mt-4">
+                                    <label class="form-label mb-0">
+                                        <h6 class="mb-1 tech-red-gradient fw-bold">Domínios Afeitos</h6>
+                                    </label>
+                                    <div id="aiDominioAfeito" class="category-bubbles-container">
+                                        <!-- Preenchido via JavaScript -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Domínios Afeitos Outros (como balões) -->
+                                <div id="aiDominioOutroContainer" class="mb-2 mt-4">
+                                    <label class="form-label mb-0">
+                                        <h6 class="mb-1 tech-red-gradient fw-bold">Domínios Afeitos Outros</h6>                                    </label>
+                                    <div id="aiDominioOutro" class="category-bubbles-container">
+                                        <!-- Preenchido via JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Texto da justificativa -->
+                            <div>
+                                <h6 class="mb-2 tech-red-gradient"><i class="fas fa-lightbulb me-2"></i>Justificativa da IA</h6>
+                                <p id="aiJustificationText" class="mb-0 text-muted fst-italic">-</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Formulário de categorização -->
+                    <div class="card-body border-bottom" style="margin-left: 0.37rem !important; margin-right: 0.30rem !important;">
+                        <div class="d-flex justify-content-between align-items-center mb-3 w-100">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-sliders-h me-2 tech-red-gradient"></i>
+                                <h5 class="mb-0 fw-bold tech-red-gradient">Classificação</h5>
+                                {% if project_logs and project_logs|length > 0 %}
+                                <span class="badge bg-light text-secondary ms-2" title="Última atualização">
+                                    <i class="fas fa-user-edit me-1"></i>{{ project_logs[0].nome_usuario }} - {{ project_logs[0].data.split(' ')[0].split('-')|reverse|join('/') }} {{ project_logs[0].data.split(' ')[1] }}
+                                </span>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <button type="button" class="btn btn-sm p-0 border-0 bg-transparent" id="toggleFormBtn">
+                                    <i class="fas fa-chevron-up text-primary"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="categorizationFormContent">
+                        <form method="POST">
+                            <input type="hidden" name="used_ai" id="used_ai" value="{% if ai_suggestion %}true{% else %}false{% endif %}">
+                            <input type="hidden" name="user_modified" id="user_modified" value="false">
+                            {% if ai_suggestion %}
+                            <script>
+                                // Inicializar diretamente o objeto de sugestões da IA
+                                var aiSuggestionData = {
+                                    _aia_n1_macroarea: "{{ ai_suggestion._aia_n1_macroarea|e }}",
+                                    _aia_n2_segmento: "{{ ai_suggestion._aia_n2_segmento|e }}",
+                                    _aia_n3_dominio_afeito: "{{ ai_suggestion._aia_n3_dominio_afeito|e }}",
+                                    _aia_n3_dominio_outro: "{{ ai_suggestion._aia_n3_dominio_outro|e }}",
+                                    confianca: "{{ ai_suggestion.confianca|e }}",
+                                    justificativa: "{{ ai_suggestion.justificativa|e }}",
+                                    project_id: "{{ ai_suggestion.project_id|e }}",
+                                    is_ai_suggestion: true
+                                };
+                                
+                                // Log para depuração
+                                console.log("Dados de sugestão da IA carregados do template:", {
+                                    _aia_n1_macroarea: "{{ ai_suggestion._aia_n1_macroarea|e }}",
+                                    _aia_n2_segmento: "{{ ai_suggestion._aia_n2_segmento|e }}",
+                                    _aia_n3_dominio_afeito: "{{ ai_suggestion._aia_n3_dominio_afeito|e }}",
+                                    _aia_n3_dominio_outro: "{{ ai_suggestion._aia_n3_dominio_outro|e }}"
+                                });
+                            </script>
+                            {% endif %}
+                            
+                            <div class="row g-4">
+                                <!-- Primeira linha: Microárea e Segmento -->
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <select class="form-select shadow-sm" id="microarea" name="microarea">
+                                            <option value="">Selecione...</option>
+                                            {% for option in categories_lists.microarea %}
+                                                {% if option %}
+                                                <option value="{{ option }}" {% if existing and existing.microarea == option %}selected{% endif %}>
+                                                    {{ option }}
+                                                </option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <label for="microarea">Microárea</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <select class="form-select shadow-sm" id="segmento" name="segmento">
+                                            <option value="">Selecione...</option>
+                                            {% for option in categories_lists.segmento %}
+                                                {% if option %}
+                                                <option value="{{ option }}" {% if existing and existing.segmento == option %}selected{% endif %}>
+                                                    {{ option }}
+                                                </option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <label for="segmento">Segmento</label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Segunda linha: Domínios -->
+                                <div class="col-md-12">
+                                    <label for="dominio" class="form-label">
+                                        <i class="fas fa-tag me-1 text-primary"></i>Domínio
+                                    </label>
+                                    <select class="form-select custom-select shadow-sm" id="dominio" name="dominio" multiple>
+                                        <!-- Preenchido via JavaScript -->
+                                    </select>
+                                    <small class="form-text text-muted">Domínios do segmento selecionado</small>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <label for="dominio_outros" class="form-label">
+                                        <i class="fas fa-tags me-1 text-primary"></i>Domínios Afeitos Outros
+                                    </label>
+                                    <select class="form-select custom-select shadow-sm" id="dominio_outros" name="dominio_outros" multiple>
+                                        <!-- Preenchido via JavaScript -->
+                                    </select>
+                                    <small class="form-text text-muted">Domínios de outros segmentos da mesma microárea</small>
+                                </div>
+                                
+                                <!-- Campo de Observações -->
+                                <div class="col-md-12 mt-4">
+                                    <label for="observacoes" class="form-label">
+                                        <i class="fas fa-comment-alt me-1 text-primary"></i>Observações
+                                    </label>
+                                    <textarea class="form-control shadow-sm" id="observacoes" name="observacoes" rows="4" placeholder="Adicione observações relevantes sobre a classificação deste projeto...">{{ existing.observacoes if existing and existing.observacoes else '' }}</textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 d-flex justify-content-end">
+                                <button type="submit" id="saveCategorizationBtn" class="btn btn-primary rounded-pill">
+                                    <i class="fas fa-save me-1"></i> SALVAR AGORA!
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function() {
+        // Função para formatar valor monetário no padrão brasileiro
+        function formatarValorMonetario(valor) {
+            // Verificar se o valor é uma string e convertê-lo para número
+            if (typeof valor === 'string') {
+                valor = parseFloat(valor.replace(/[^\d.-]/g, ''));
+            }
+            
+            // Verificar se é um número válido
+            if (isNaN(valor)) {
+                return "R$ 0,00";
+            }
+            
+            // Formatar o número com separadores de milhares e decimais no padrão brasileiro
+            return "R$ " + valor.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+        
+        // Função para formatar percentual no padrão brasileiro
+        function formatarPercentual(valor) {
+            // Verificar se o valor é uma string e convertê-lo para número
+            if (typeof valor === 'string') {
+                valor = parseFloat(valor.replace(/[^\d.-]/g, ''));
+            }
+            
+            // Verificar se é um número válido
+            if (isNaN(valor)) {
+                return "0,00%";
+            }
+            
+            // Se o valor estiver em formato decimal (ex: 0.25), multiplicar por 100
+            if (valor < 1) {
+                valor = valor * 100;
+            }
+            
+            // Formatar o número com separador decimal no padrão brasileiro
+            return valor.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "%";
+        }
+        
+        // Formatar o valor total
+        var valorTotal = "{{ project._valor_total }}";
+        if (valorTotal) {
+            $('#valor_total_formatado').text(formatarValorMonetario(valorTotal));
+        }
+        
+        // Formatar os percentuais
+        $('.percentual-formatado').each(function() {
+            var valor = $(this).data('valor');
+            if (valor) {
+                $(this).text(formatarPercentual(valor));
+            }
+        });
+        
+        // Dados de domínios organizados por microárea e segmento
+        var dominiosPorMicroareaSegmento = JSON.parse('{{ categories_lists.dominios_por_microarea_segmento_json|safe }}');
+        console.log("Dados carregados:", dominiosPorMicroareaSegmento);
+        
+        // Armazenar todas as opções de segmento originais
+        var todasOpcoesSegmento = [];
+        $('#segmento option').each(function() {
+            todasOpcoesSegmento.push({
+                value: $(this).val(),
+                text: $(this).text()
+            });
+        });
+        console.log("Todas opções de segmento:", todasOpcoesSegmento);
+        
+        // Inicializar variáveis para armazenar seleções existentes
+        var existingMicroarea = "{{ existing.microarea if existing and existing.microarea else '' }}";
+        var existingSegmento = "{{ existing.segmento if existing and existing.segmento else '' }}";
+        var existingDominio = "{{ existing.dominio if existing and existing.dominio else '' }}";
+        var existingDominioOutros = "{{ existing.dominio_outros if existing and existing.dominio_outros else '' }}";
+        
+        // Se não houver valores existentes e houver sugestões da IA, usar as sugestões
+        if ((!existingMicroarea || !existingSegmento) && typeof aiSuggestionData !== 'undefined') {
+            if (!existingMicroarea && aiSuggestionData._aia_n1_macroarea) {
+                existingMicroarea = aiSuggestionData._aia_n1_macroarea;
+                console.log("Usando microárea da IA:", existingMicroarea);
+            }
+            if (!existingSegmento && aiSuggestionData._aia_n2_segmento) {
+                existingSegmento = aiSuggestionData._aia_n2_segmento;
+                console.log("Usando segmento da IA:", existingSegmento);
+            }
+            if (!existingDominio && aiSuggestionData._aia_n3_dominio_afeito) {
+                existingDominio = aiSuggestionData._aia_n3_dominio_afeito;
+                console.log("Usando domínio da IA:", existingDominio);
+            }
+            if (!existingDominioOutros && aiSuggestionData._aia_n3_dominio_outro) {
+                existingDominioOutros = aiSuggestionData._aia_n3_dominio_outro;
+                console.log("Usando domínio outros da IA:", existingDominioOutros);
+            }
+        }
+        
+        console.log("Valores a serem aplicados:", {
+            microarea: existingMicroarea,
+            segmento: existingSegmento,
+            dominio: existingDominio,
+            dominio_outros: existingDominioOutros
+        });
+        
+        // Função para filtrar segmentos com base na microárea selecionada
+        function filtrarSegmentos() {
+            var microarea = $('#microarea').val();
+            console.log("Filtrando segmentos para microárea:", microarea);
+            
+            // Limpar o select de segmento
+            $('#segmento').empty();
+            $('#segmento').append(new Option('Selecione...', ''));
+            
+            if (microarea && dominiosPorMicroareaSegmento && dominiosPorMicroareaSegmento[microarea]) {
+                console.log("Segmentos disponíveis:", Object.keys(dominiosPorMicroareaSegmento[microarea]));
+                
+                // Adicionar apenas os segmentos da microárea selecionada
+                for (var segmento in dominiosPorMicroareaSegmento[microarea]) {
+                    $('#segmento').append(new Option(segmento, segmento));
+                    console.log("Adicionado segmento:", segmento);
+                }
+                
+                // Restaurar seleção anterior de segmento se existir e pertencer à microárea selecionada
+                if (existingSegmento && dominiosPorMicroareaSegmento[microarea][existingSegmento]) {
+                    $('#segmento').val(existingSegmento);
+                    console.log("Restaurada seleção de segmento:", existingSegmento);
+                }
+            } else {
+                console.log("Nenhuma microárea selecionada ou dados não disponíveis, mostrando todos os segmentos");
+                // Se nenhuma microárea selecionada, mostrar todos os segmentos
+                for (var i = 0; i < todasOpcoesSegmento.length; i++) {
+                    if (todasOpcoesSegmento[i].value) {
+                        $('#segmento').append(new Option(todasOpcoesSegmento[i].text, todasOpcoesSegmento[i].value));
+                    }
+                }
+            }
+            
+            // Atualizar os domínios após filtrar os segmentos
+            atualizarDominios();
+        }
+        
+        // Função para atualizar os domínios com base na microárea e segmento selecionados
+        function atualizarDominios() {
+            var microarea = $('#microarea').val();
+            var segmento = $('#segmento').val();
+            console.log("Atualizando domínios para microárea:", microarea, "e segmento:", segmento);
+            
+            // Limpar os selects de domínios
+            $('#dominio').empty();
+            $('#dominio_outros').empty();
+            console.log("Selects de domínios limpos");
+            
+            if (microarea && dominiosPorMicroareaSegmento && dominiosPorMicroareaSegmento[microarea]) {
+                console.log("Dados encontrados para a microárea:", microarea);
+                
+                // Preencher domínios do segmento selecionado
+                if (segmento && dominiosPorMicroareaSegmento[microarea][segmento]) {
+                    var dominiosSegmento = dominiosPorMicroareaSegmento[microarea][segmento];
+                    console.log("Domínios do segmento selecionado:", dominiosSegmento);
+                    
+                    for (var i = 0; i < dominiosSegmento.length; i++) {
+                        var dominio = dominiosSegmento[i];
+                        $('#dominio').append(new Option(dominio, dominio));
+                        console.log("Adicionado domínio:", dominio);
+                    }
+                } else {
+                    console.log("Segmento não encontrado ou não selecionado:", segmento);
+                }
+                
+                // Preencher domínios de outros segmentos da mesma microárea
+                var dominiosOutros = [];
+                var segmentosProcessados = 0;
+                
+                console.log("Processando domínios de outros segmentos da mesma microárea...");
+                for (var outroSegmento in dominiosPorMicroareaSegmento[microarea]) {
+                    segmentosProcessados++;
+                    
+                    if (outroSegmento !== segmento) {
+                        console.log("Processando segmento diferente:", outroSegmento);
+                        var dominiosOutroSegmento = dominiosPorMicroareaSegmento[microarea][outroSegmento];
+                        console.log("Domínios do segmento", outroSegmento, ":", dominiosOutroSegmento);
+                        
+                        for (var j = 0; j < dominiosOutroSegmento.length; j++) {
+                            var dominioOutro = dominiosOutroSegmento[j];
+                            $('#dominio_outros').append(new Option(dominioOutro, dominioOutro));
+                            dominiosOutros.push(dominioOutro);
+                            console.log("Adicionado domínio outro:", dominioOutro);
+                        }
+                    } else {
+                        console.log("Ignorando segmento atual:", segmento);
+                    }
+                }
+                
+                console.log("Total de segmentos processados:", segmentosProcessados);
+                console.log("Total de domínios outros adicionados:", dominiosOutros.length);
+                
+                // Verificar se o select de domínios outros tem opções
+                var totalOptions = $('#dominio_outros option').length;
+                console.log("Total de opções no select de domínios outros:", totalOptions);
+            } else {
+                console.log("Nenhum dado encontrado para a microárea:", microarea);
+            }
+            
+            // Restaurar seleções anteriores se existirem
+            if (existingDominio) {
+                var dominioArray = existingDominio.split(';');
+                $('#dominio').val(dominioArray);
+                console.log("Restaurados domínios:", dominioArray);
+            }
+            
+            if (existingDominioOutros) {
+                var dominioOutrosArray = existingDominioOutros.split(';');
+                $('#dominio_outros').val(dominioOutrosArray);
+                console.log("Restaurados domínios outros:", dominioOutrosArray);
+                
+                // Verificar se a seleção foi aplicada corretamente
+                var selectedValues = $('#dominio_outros').val();
+                console.log("Valores selecionados após restauração:", selectedValues);
+                
+                if (!selectedValues || selectedValues.length === 0) {
+                    console.warn("Falha ao restaurar domínios outros. Tentando novamente com delay...");
+                    
+                    // Tentar novamente com um delay
+                    setTimeout(function() {
+                        $('#dominio_outros').val(dominioOutrosArray);
+                        console.log("Tentativa de restauração com delay. Valores selecionados:", $('#dominio_outros').val());
+                    }, 500);
+                }
+            } else {
+                console.log("Não há domínios outros existentes para restaurar");
+            }
+        }
+        
+        // Atualizar segmentos quando microárea mudar
+        $('#microarea').change(filtrarSegmentos);
+        
+        // Atualizar domínios quando segmento mudar
+        $('#segmento').change(atualizarDominios);
+        
+        // Inicializar os filtros com um atraso maior para garantir que todos os elementos estejam carregados
+        setTimeout(function() {
+            console.log("Inicializando filtros com valores existentes");
+            if (existingMicroarea) {
+                $('#microarea').val(existingMicroarea);
+                console.log("Microárea definida para:", existingMicroarea);
+                
+                // Chamar filtrarSegmentos com um atraso maior para garantir que o valor foi aplicado
+                setTimeout(function() {
+                    console.log("Chamando filtrarSegmentos após delay...");
+                    filtrarSegmentos(); // Isso também chamará atualizarDominios()
+                }, 500); // Aumentado para 500ms
+            } else {
+                console.log("Não há microárea existente, chamando atualizarDominios diretamente...");
+                atualizarDominios(); // Se não houver microárea selecionada, apenas inicializar domínios
+            }
+        }, 500); // Aumentado para 500ms
+        
+        // Adicionar o ID do projeto como campo oculto para o script de sugestões da IA
+        var projectId = "{{ project.codigo_projeto if project and project.codigo_projeto else '' }}";
+        if (projectId) {
+            $('form').append('<input type="hidden" id="project_id" value="' + projectId + '">');
+        }
+
+        // Funcionalidade para expandir/colapsar a seção de dados do projeto
+        $('#projectDetailsHeader').on('click', function() {
+            $('.project-collapse-icon i').toggleClass('fa-chevron-up fa-chevron-down');
+        });
+        
+        // Funcionalidade para expandir/colapsar a seção de categorização
+        $('#categorizationHeader').on('click', function() {
+            $('.collapse-icon i').toggleClass('fa-chevron-up fa-chevron-down');
+        });
+        
+        // Funcionalidade para expandir/colapsar o formulário de categorização
+        $('#toggleFormBtn').on('click', function() {
+            $('#categorizationFormContent').slideToggle();
+            $(this).find('i').toggleClass('fa-chevron-up fa-chevron-down');
+        });
+
+        // Variável para rastrear se o usuário modificou os campos
+        var userModifiedForm = false;
+        // Variável para rastrear se estamos aplicando sugestões da IA
+        window.applyingAiSuggestions = false;
+        
+        // Adicionar event listeners para todos os campos do formulário
+        $('#microarea, #segmento, #dominio, #dominio_outros').on('change', function(e) {
+            // Verificar se a mudança foi feita pelo usuário (não pelo script de sugestões)
+            if (!window.applyingAiSuggestions) {
+                userModifiedForm = true;
+                $('#user_modified').val('true');
+                console.log("Usuário modificou o formulário. Campo alterado:", $(this).attr('id'));
+            }
+        });
+        
+        // Expor as funções globalmente para o script de sugestões da IA
+        window.filtrarSegmentos = filtrarSegmentos;
+        window.atualizarDominios = atualizarDominios;
+        
+        // Definir tema personalizado para SweetAlert
+        const greenGradientButtonStyle = {
+            confirmButtonColor: '#28a745',
+            confirmButtonText: 'Sim, salvar',
+            customClass: {
+                confirmButton: 'btn-green-gradient'
+            }
+        };
+        
+        // Adicionar estilo CSS para o botão com gradiente verde
+        $('<style>')
+            .prop('type', 'text/css')
+            .html(`
+                .btn-green-gradient {
+                    background: linear-gradient(135deg, #28a745, #20c997) !important;
+                    border: none !important;
+                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+                }
+                .btn-green-gradient:hover {
+                    background: linear-gradient(135deg, #218838, #1ba87e) !important;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+                }
+            `)
+            .appendTo('head');
+        
+        // Manipular o envio do formulário
+        $('form').on('submit', function(e) {
+            e.preventDefault(); // Impedir o envio padrão do formulário
+            
+            // Mostrar SweetAlert de confirmação
+            Swal.fire({
+                title: 'Confirmar',
+                text: 'Deseja salvar estas classificações para o projeto?',
+                icon: 'question',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                ...greenGradientButtonStyle
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Mostrar loading
+                    Swal.fire({
+                        title: 'Salvando...',
+                        text: 'Aguarde enquanto salvamos...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    // Obter os dados do formulário
+                    var formData = new FormData(this);
+                    
+                    // Enviar os dados via AJAX
+                    $.ajax({
+                        url: window.location.href,
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            // Mostrar mensagem de sucesso
+                            Swal.fire({
+                                title: 'Sucesso!',
+                                text: 'Classificações salvas com sucesso',
+                                icon: 'success',
+                                ...greenGradientButtonStyle,
+                                confirmButtonText: 'OK'
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            // Mostrar mensagem de erro
+                            Swal.fire({
+                                title: 'Erro!',
+                                text: 'Ocorreu um erro ao salvar: ' + error,
+                                icon: 'error',
+                                ...greenGradientButtonStyle,
+                                confirmButtonText: 'OK'
+                            });
+                            console.error('Erro ao salvar:', error);
+                            console.error('Resposta do servidor:', xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+<!-- Incluir o script de sugestões da IA -->
+<script src="{{ url_for('static', filename='js/ai_suggestions.js') }}"></script>
+{% endblock %}

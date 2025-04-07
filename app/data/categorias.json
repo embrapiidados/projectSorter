@@ -1,0 +1,18 @@
+[
+  {
+    "id_projeto": "PCOP-2503.0061",
+    "_aia_n1_macroarea": "Engenharia de Produção",
+    "_aia_n2_segmento": "Gestão da Produção e Operações",
+    "_aia_n3_dominio_afeito": "Planejamento de processos produtivos;Controle de produção em tempo real;Otimização de linhas de montagem e processos industriais",
+    "_aia_n3_dominio_outro": "Eficiência no uso de energia e insumos;Gestão ambiental de processos produtivos",
+    "observacoes": "teste"
+  },
+  {
+    "id_projeto": "PIFS-2503.0086",
+    "_aia_n1_macroarea": "Saúde",
+    "_aia_n2_segmento": "Assistência à Saúde",
+    "_aia_n3_dominio_afeito": "Telemedicina;Tecnologias para reabilitação física, cognitiva e cuidados contínuos",
+    "_aia_n3_dominio_outro": "Engenharia de tecidos;Desenvolvimento de medicamentos",
+    "observacoes": ""
+  }
+]
