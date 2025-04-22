@@ -24,25 +24,15 @@ def puxar_planilhas():
     apagar_arquivos_pasta(data_json)
 
     get_file('portfolio.xlsx', 'DWPII/srinfo', inputs)
-    # get_file('projetos_empresas.xlsx', 'DWPII/srinfo', inputs)
-    # get_file('informacoes_empresas.xlsx', 'DWPII/srinfo', inputs)
-    # get_file('info_unidades_embrapii.xlsx', 'DWPII/srinfo', inputs)
-    # get_file('pedidos_pi.xlsx', 'DWPII/srinfo', inputs)
-    # get_file('ue_linhas_atuacao.xlsx', 'DWPII/srinfo', inputs)
-    # get_file('macroentregas.xlsx', 'DWPII/srinfo', inputs)
-    # get_file('negociacoes_negociacoes.xlsx', 'DWPII/srinfo', inputs)
-    # get_file('classificacao_projeto.xlsx', 'DWPII/srinfo', inputs)
-    # get_file('projetos.xlsx', 'DWPII/srinfo', inputs)
-    # get_file('prospeccao_prospeccao.xlsx', 'DWPII/srinfo', inputs)
-    # get_file('cnae_ibge.xlsx', 'DWPII/lookup_tables', inputs)
+
     
     print("🟢 " + inspect.currentframe().f_code.co_name)
 
 def apagar_arquivos_pasta(caminho_pasta):
     try:
-        # Verifica se o caminho é válido
-        if not os.path.isdir(caminho_pasta):
-            print(f"O caminho {caminho_pasta} não é uma pasta válida.")
+        # Verifica se o caminho é uma pasta; se não for, cria
+        if not os.path.exists(caminho_pasta):
+            os.makedirs(caminho_pasta)
             return
         
         # Lista todos os arquivos na pasta
@@ -55,7 +45,3 @@ def apagar_arquivos_pasta(caminho_pasta):
                 os.remove(caminho_arquivo)
     except Exception as e:
         print(f"🔴 Ocorreu um erro ao apagar os arquivos: {e}")
-
-# puxar_planilhas()
-
-

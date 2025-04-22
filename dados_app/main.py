@@ -18,7 +18,7 @@ def main():
     puxar_planilhas()
     tratar_portfolio()
     gerar_arquivos_json()
-    levar_arquivos_json()
+    # levar_arquivos_json()
 
     print("🟢 " + inspect.currentframe().f_code.co_name)
     
